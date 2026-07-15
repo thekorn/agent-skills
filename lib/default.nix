@@ -5,7 +5,7 @@
     builtins.listToAttrs (
       map (name: {
         inherit name;
-        value = skills.${name} or throw "Unknown agent skill: ${name}";
+        value = skills.${name} or (throw "Unknown agent skill: ${name}");
       })
       names
     );
