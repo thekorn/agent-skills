@@ -5,6 +5,26 @@ Nix flake. The repository exposes a Home Manager module, a catalog of skill
 paths, reusable profiles, and a small selection library. A consuming Nix
 configuration decides which skills are installed on each machine.
 
+## Integrated skills
+
+| Skill | Purpose |
+| --- | --- |
+| [`bun-development`](skills/bun-development/) | Develop JavaScript and TypeScript applications with the Bun runtime and toolchain. |
+| [`commit`](skills/commit/) | Create focused Git commits with concise Conventional Commits-style subjects. |
+| [`design-md`](skills/design-md/) | Analyze Stitch projects and synthesize their design systems into `DESIGN.md`. |
+| [`frontend-design`](skills/frontend-design/) | Design and implement distinctive, production-ready frontend interfaces. |
+| [`gh-cli`](skills/gh-cli/) | Work with GitHub repositories, issues, pull requests, Actions, and releases through `gh`. |
+| [`github-workflow`](skills/github-workflow/) | Run issue-driven development workflows with GitHub issues and pull requests. |
+| [`gitlab-workflow`](skills/gitlab-workflow/) | Run issue-driven development workflows with GitLab issues and merge requests. |
+| [`glab`](skills/glab/) | Work with GitLab issues, merge requests, CI/CD, and repositories through `glab`. |
+| [`html`](skills/html/) | Create self-contained HTML reports, explainers, comparisons, decks, and prototypes. |
+| [`html-diagram`](skills/html-diagram/) | Create self-contained visual HTML architecture and stack diagrams. |
+| [`html-plan`](skills/html-plan/) | Create pragmatic, visually organized plans as self-contained HTML. |
+| [`hunk-review`](skills/hunk-review/) | Inspect and control live Hunk diff-review sessions from the command line. |
+| [`sqlite3-cli`](skills/sqlite3-cli/) | Inspect SQLite databases with the `sqlite3` CLI and Markdown-formatted results. |
+| [`stitch-loop`](skills/stitch-loop/) | Iteratively build websites with Stitch using a baton-passing workflow. |
+| [`web-browser`](skills/web-browser/) | Control Chrome or Chromium through CDP with bundled Node.js scripts. |
+
 ## Public flake API
 
 ```nix
