@@ -23,7 +23,7 @@
     cfg.skills;
 
   enabledTargetFiles = lib.mkMerge [
-    (lib.optionalAttrs cfg.targets.codex (mkSkillFiles ".agents/skills"))
+    (lib.optionalAttrs cfg.targets.generic (mkSkillFiles ".agents/skills"))
     (lib.optionalAttrs cfg.targets.claude (mkSkillFiles ".claude/skills"))
   ];
 
@@ -61,7 +61,7 @@ in {
     };
 
     targets = {
-      codex = mkOption {
+      generic = mkOption {
         type = types.bool;
         default = true;
         description = "Install skills into ~/.agents/skills.";

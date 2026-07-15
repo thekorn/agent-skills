@@ -135,7 +135,7 @@ Select profiles or individual skills in a Home Manager module:
     enable = true;
 
     targets = {
-      codex = true;
+      generic = true;
       claude = true;
     };
 
@@ -148,7 +148,7 @@ Select profiles or individual skills in a Home Manager module:
 }
 ```
 
-The default target is Codex only. The resulting links are:
+The generic target is enabled by default. The resulting links are:
 
 ```text
 ~/.agents/skills/<skill-name>
