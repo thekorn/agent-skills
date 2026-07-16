@@ -2,14 +2,46 @@
  * Minimal CDP client - no puppeteer, no hangs
  */
 
-import WebSocket from 'ws';
+import WebSocket from "ws";
+
+const DEBUG_HOST = process.env.BROWSER_DEBUG_HOST || "localhost";
+const DEBUG_PORT = Number(process.env.BROWSER_DEBUG_PORT || 9222);
+const DEBUG_HTTP_URL = `http://${DEBUG_HOST}:${DEBUG_PORT}`;
+
+function exceptionMessage(result) {
+  return (
+    result.exceptionDetails.exception?.description || result.exceptionDetails.text
+  );
+}
+
+function remoteObjectValue(remoteObject) {
+  if (!remoteObject) return undefined;
+  if ("value" in remoteObject) return remoteObject.value;
+
+  switch (remoteObject.unserializableValue) {
+    case "NaN":
+      return NaN;
+    case "Infinity":
+      return Infinity;
+    case "-Infinity":
+      return -Infinity;
+    case "-0":
+      return -0;
+  }
+
+  if (remoteObject.type === "bigint" && remoteObject.unserializableValue) {
+    return BigInt(remoteObject.unserializableValue.slice(0, -1));
+  }
+
+  return undefined;
+}
 
 export async function connect(timeout = 5000) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
 
   try {
-    const resp = await fetch('http://localhost:9222/json/version', {
+    const resp = await fetch(`${DEBUG_HTTP_URL}/json/version`, {
       signal: controller.signal,
     });
     const { webSocketDebuggerUrl } = await resp.json();
@@ -19,22 +51,24 @@ export async function connect(timeout = 5000) {
       const ws = new WebSocket(webSocketDebuggerUrl);
       const connectTimeout = setTimeout(() => {
         ws.close();
-        reject(new Error('WebSocket connect timeout'));
+        reject(new Error("WebSocket connect timeout"));
       }, timeout);
 
-      ws.on('open', () => {
+      ws.on("open", () => {
         clearTimeout(connectTimeout);
         resolve(new CDP(ws));
       });
-      ws.on('error', (e) => {
+      ws.on("error", (e) => {
         clearTimeout(connectTimeout);
         reject(e);
       });
     });
   } catch (e) {
     clearTimeout(timeoutId);
-    if (e.name === 'AbortError') {
-      throw new Error('Connection timeout - is Chrome running with --remote-debugging-port=9222?');
+    if (e.name === "AbortError") {
+      throw new Error(
+        `Connection timeout - is Chrome running with --remote-debugging-port=${DEBUG_PORT}?`,
+      );
     }
     throw e;
   }
@@ -48,7 +82,7 @@ class CDP {
     this.sessions = new Map();
     this.eventHandlers = new Map();
 
-    ws.on('message', (data) => {
+    ws.on("message", (data) => {
       const msg = JSON.parse(data.toString());
       if (msg.id && this.callbacks.has(msg.id)) {
         const { resolve, reject } = this.callbacks.get(msg.id);
@@ -123,12 +157,12 @@ class CDP {
   }
 
   async getPages() {
-    const { targetInfos } = await this.send('Target.getTargets');
-    return targetInfos.filter((t) => t.type === 'page');
+    const { targetInfos } = await this.send("Target.getTargets");
+    return targetInfos.filter((t) => t.type === "page");
   }
 
   async attachToPage(targetId) {
-    const { sessionId } = await this.send('Target.attachToTarget', {
+    const { sessionId } = await this.send("Target.attachToTarget", {
       targetId,
       flatten: true,
     });
@@ -137,53 +171,118 @@ class CDP {
 
   async evaluate(sessionId, expression, timeout = 30000) {
     const result = await this.send(
-      'Runtime.evaluate',
+      "Runtime.evaluate",
       {
         expression,
         returnByValue: true,
         awaitPromise: true,
       },
       sessionId,
-      timeout,
+      timeout
     );
 
     if (result.exceptionDetails) {
-      throw new Error(
-        result.exceptionDetails.exception?.description || result.exceptionDetails.text,
-      );
+      throw new Error(exceptionMessage(result));
     }
     return result.result?.value;
   }
 
+  async evaluateRepl(sessionId, expression, timeout = 30000) {
+    const objectGroup = `agent-eval-${Date.now()}-${Math.random()}`;
+
+    try {
+      const result = await this.send(
+        "Runtime.evaluate",
+        {
+          expression,
+          objectGroup,
+          returnByValue: false,
+          replMode: true,
+        },
+        sessionId,
+        timeout
+      );
+
+      if (result.exceptionDetails) {
+        throw new Error(exceptionMessage(result));
+      }
+
+      let remoteObject = result.result;
+      if (remoteObject?.subtype === "promise" && remoteObject.objectId) {
+        const awaited = await this.send(
+          "Runtime.awaitPromise",
+          {
+            promiseObjectId: remoteObject.objectId,
+            returnByValue: true,
+          },
+          sessionId,
+          timeout
+        );
+
+        if (awaited.exceptionDetails) {
+          throw new Error(exceptionMessage(awaited));
+        }
+
+        remoteObject = awaited.result;
+      } else if (remoteObject?.objectId) {
+        const cloned = await this.send(
+          "Runtime.callFunctionOn",
+          {
+            objectId: remoteObject.objectId,
+            functionDeclaration: "function() { return this; }",
+            returnByValue: true,
+          },
+          sessionId,
+          timeout
+        );
+
+        if (cloned.exceptionDetails) {
+          throw new Error(exceptionMessage(cloned));
+        }
+
+        remoteObject = cloned.result;
+      }
+
+      return remoteObjectValue(remoteObject);
+    } finally {
+      await this.send(
+        "Runtime.releaseObjectGroup",
+        { objectGroup },
+        sessionId,
+        1000,
+      ).catch(() => {});
+    }
+  }
+
   async screenshot(sessionId, timeout = 10000) {
     const { data } = await this.send(
-      'Page.captureScreenshot',
-      { format: 'png' },
+      "Page.captureScreenshot",
+      { format: "png" },
       sessionId,
-      timeout,
+      timeout
     );
-    return Buffer.from(data, 'base64');
+    return Buffer.from(data, "base64");
   }
 
   async navigate(sessionId, url, timeout = 30000) {
-    await this.send('Page.navigate', { url }, sessionId, timeout);
+    await this.send("Page.navigate", { url }, sessionId, timeout);
   }
 
   async getFrameTree(sessionId) {
-    const { frameTree } = await this.send('Page.getFrameTree', {}, sessionId);
+    const { frameTree } = await this.send("Page.getFrameTree", {}, sessionId);
     return frameTree;
   }
 
   async evaluateInFrame(sessionId, frameId, expression, timeout = 30000) {
     // Create isolated world for the frame
     const { executionContextId } = await this.send(
-      'Page.createIsolatedWorld',
-      { frameId, worldName: 'cdp-eval' },
-      sessionId,
+      "Page.createIsolatedWorld",
+      { frameId, worldName: "cdp-eval" },
+      sessionId
     );
 
     const result = await this.send(
-      'Runtime.evaluate',
+      "Runtime.evaluate",
       {
         expression,
         contextId: executionContextId,
@@ -191,13 +290,11 @@ class CDP {
         awaitPromise: true,
       },
       sessionId,
-      timeout,
+      timeout
     );
 
     if (result.exceptionDetails) {
-      throw new Error(
-        result.exceptionDetails.exception?.description || result.exceptionDetails.text,
-      );
+      throw new Error(exceptionMessage(result));
     }
     return result.result?.value;
   }

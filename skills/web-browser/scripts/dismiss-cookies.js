@@ -11,13 +11,14 @@
  *   ./dismiss-cookies.js --reject # Reject cookies (where possible)
  */
 
-import { connect } from './cdp.js';
+import { connect } from "./cdp.js";
+import { applyActiveEmulation } from "./emulation-state.js";
 
-const DEBUG = process.env.DEBUG === '1';
-const log = DEBUG ? (...args) => console.error('[debug]', ...args) : () => {};
+const DEBUG = process.env.DEBUG === "1";
+const log = DEBUG ? (...args) => console.error("[debug]", ...args) : () => {};
 
-const reject = process.argv.includes('--reject');
-const mode = reject ? 'reject' : 'accept';
+const reject = process.argv.includes("--reject");
+const mode = reject ? "reject" : "accept";
 
 const COOKIE_DISMISS_SCRIPT = `(acceptCookies) => {
   const clicked = [];
@@ -290,82 +291,85 @@ function collectFrames(frameTree, frames = []) {
 
 // Global timeout
 const globalTimeout = setTimeout(() => {
-  console.error('✗ Global timeout exceeded (30s)');
+  console.error("✗ Global timeout exceeded (30s)");
   process.exit(1);
 }, 30000);
 
 try {
-  log('connecting...');
+  log("connecting...");
   const cdp = await connect(5000);
 
-  log('getting pages...');
+  log("getting pages...");
   const pages = await cdp.getPages();
   const page = pages.at(-1);
 
   if (!page) {
-    console.error('✗ No active tab found');
+    console.error("✗ No active tab found");
     process.exit(1);
   }
 
-  log('attaching to page...');
+  log("attaching to page...");
   const sessionId = await cdp.attachToPage(page.targetId);
+
+  log("applying active emulation (if configured)...");
+  await applyActiveEmulation(cdp, sessionId);
 
   // Wait a bit for consent dialogs to appear
   await new Promise((r) => setTimeout(r, 500));
 
-  log('trying main page...');
+  log("trying main page...");
   let result = await cdp.evaluate(sessionId, `(${COOKIE_DISMISS_SCRIPT})(${!reject})`);
 
   // If nothing found, try iframes
   if (result.length === 0) {
-    log('trying iframes...');
+    log("trying iframes...");
     try {
       const frameTree = await cdp.getFrameTree(sessionId);
       const frames = collectFrames(frameTree);
 
       for (const frame of frames) {
-        if (frame.url === 'about:blank' || frame.url.startsWith('javascript:')) continue;
+        if (frame.url === "about:blank" || frame.url.startsWith("javascript:")) continue;
         if (
-          frame.url.includes('sp_message') ||
-          frame.url.includes('consent') ||
-          frame.url.includes('privacy') ||
-          frame.url.includes('cmp') ||
-          frame.url.includes('sourcepoint') ||
-          frame.url.includes('cookie') ||
-          frame.url.includes('privacy-mgmt')
+          frame.url.includes("sp_message") ||
+          frame.url.includes("consent") ||
+          frame.url.includes("privacy") ||
+          frame.url.includes("cmp") ||
+          frame.url.includes("sourcepoint") ||
+          frame.url.includes("cookie") ||
+          frame.url.includes("privacy-mgmt")
         ) {
-          log('trying frame:', frame.url.slice(0, 60));
+          log("trying frame:", frame.url.slice(0, 60));
           try {
             const frameResult = await cdp.evaluateInFrame(
               sessionId,
               frame.id,
-              `(${IFRAME_DISMISS_SCRIPT})(${!reject})`,
+              `(${IFRAME_DISMISS_SCRIPT})(${!reject})`
             );
             if (frameResult.length > 0) {
               result = frameResult;
               break;
             }
           } catch (e) {
-            log('frame error:', e.message);
+            log("frame error:", e.message);
           }
         }
       }
     } catch (e) {
-      log('getFrameTree error:', e.message);
+      log("getFrameTree error:", e.message);
     }
   }
 
   if (result.length > 0) {
-    console.log(`✓ Dismissed cookie dialog (${mode}): ${result.join(', ')}`);
+    console.log(`✓ Dismissed cookie dialog (${mode}): ${result.join(", ")}`);
   } else {
     console.log(`○ No cookie dialog found to ${mode}`);
   }
 
-  log('closing...');
+  log("closing...");
   cdp.close();
-  log('done');
+  log("done");
 } catch (e) {
-  console.error('✗', e.message);
+  console.error("✗", e.message);
   process.exit(1);
 } finally {
   clearTimeout(globalTimeout);

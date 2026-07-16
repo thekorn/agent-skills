@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-import { existsSync, readdirSync, readFileSync, statSync, watch } from 'node:fs';
-import { homedir } from 'node:os';
-import { join } from 'node:path';
+import { existsSync, readdirSync, readFileSync, statSync, watch } from "node:fs";
+import { homedir } from "node:os";
+import { join } from "node:path";
 
-const LOG_ROOT = join(homedir(), '.cache/agent-web/logs');
+const LOG_ROOT = join(homedir(), ".cache/agent-web/logs");
 
 function findLatestFile() {
   if (!existsSync(LOG_ROOT)) return null;
@@ -16,7 +16,7 @@ function findLatestFile() {
   if (dirs.length === 0) return null;
   const latestDir = dirs[dirs.length - 1];
   const files = readdirSync(latestDir)
-    .filter((name) => name.endsWith('.jsonl'))
+    .filter((name) => name.endsWith(".jsonl"))
     .map((name) => join(latestDir, name))
     .map((path) => ({ path, mtime: statSafe(path)?.mtimeMs || 0 }))
     .sort((a, b) => b.mtime - a.mtime);
@@ -31,18 +31,18 @@ function statSafe(path) {
   }
 }
 
-const argIndex = process.argv.indexOf('--file');
+const argIndex = process.argv.indexOf("--file");
 const filePath = argIndex !== -1 ? process.argv[argIndex + 1] : findLatestFile();
-const follow = process.argv.includes('--follow');
+const follow = process.argv.includes("--follow");
 
 if (!filePath) {
-  console.error('✗ No log file found');
+  console.error("✗ No log file found");
   process.exit(1);
 }
 
 function readAll() {
   if (!existsSync(filePath)) return;
-  const data = readFileSync(filePath, 'utf8');
+  const data = readFileSync(filePath, "utf8");
   if (data.length > 0) process.stdout.write(data);
 }
 
@@ -50,7 +50,7 @@ let offset = 0;
 
 function readNew() {
   if (!existsSync(filePath)) return;
-  const data = readFileSync(filePath, 'utf8');
+  const data = readFileSync(filePath, "utf8");
   if (data.length <= offset) return;
   const chunk = data.slice(offset);
   offset = data.length;
@@ -64,6 +64,6 @@ try {
   watch(filePath, { persistent: true }, () => readNew());
   console.log(`✓ tailing ${filePath}`);
 } catch (e) {
-  console.error('✗ tail failed:', e.message);
+  console.error("✗ tail failed:", e.message);
   process.exit(1);
 }
