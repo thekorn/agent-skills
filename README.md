@@ -17,6 +17,8 @@ configuration decides which skills are installed on each machine.
 | [`github-workflow`](skills/github-workflow/) | Run issue-driven development workflows with GitHub issues and pull requests. |
 | [`gitlab-workflow`](skills/gitlab-workflow/) | Run issue-driven development workflows with GitLab issues and merge requests. |
 | [`glab`](skills/glab/) | Work with GitLab issues, merge requests, CI/CD, and repositories through `glab`. |
+| [`grill-me`](skills/grill-me/) | Sharpen a plan or design through a relentless interview. |
+| [`grilling`](skills/grilling/) | Stress-test a plan, decision, or idea one question at a time. |
 | [`html`](skills/html/) | Create self-contained HTML reports, explainers, comparisons, decks, and prototypes. |
 | [`html-diagram`](skills/html-diagram/) | Create self-contained visual HTML architecture and stack diagrams. |
 | [`html-plan`](skills/html-plan/) | Create pragmatic, visually organized plans as self-contained HTML. |

@@ -7,6 +7,8 @@
   github-workflow = root + "/skills/github-workflow";
   gitlab-workflow = root + "/skills/gitlab-workflow";
   glab = root + "/skills/glab";
+  grill-me = root + "/skills/grill-me";
+  grilling = root + "/skills/grilling";
   html = root + "/skills/html";
   html-diagram = root + "/skills/html-diagram";
   html-plan = root + "/skills/html-plan";
