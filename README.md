@@ -19,6 +19,7 @@ configuration decides which skills are installed on each machine.
 | [`glab`](skills/glab/) | Work with GitLab issues, merge requests, CI/CD, and repositories through `glab`. |
 | [`grill-me`](skills/grill-me/) | Sharpen a plan or design through a relentless interview. |
 | [`grilling`](skills/grilling/) | Stress-test a plan, decision, or idea one question at a time. |
+| [`herdr`](skills/herdr/) | Control Herdr workspaces, tabs, panes, terminals, commands, and coding agents. |
 | [`html`](skills/html/) | Create self-contained HTML reports, explainers, comparisons, decks, and prototypes. |
 | [`html-diagram`](skills/html-diagram/) | Create self-contained visual HTML architecture and stack diagrams. |
 | [`html-plan`](skills/html-plan/) | Create pragmatic, visually organized plans as self-contained HTML. |

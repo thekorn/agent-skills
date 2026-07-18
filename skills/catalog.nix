@@ -9,6 +9,7 @@
   glab = root + "/skills/glab";
   grill-me = root + "/skills/grill-me";
   grilling = root + "/skills/grilling";
+  herdr = root + "/skills/herdr";
   html = root + "/skills/html";
   html-diagram = root + "/skills/html-diagram";
   html-plan = root + "/skills/html-plan";
