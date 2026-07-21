@@ -1,7 +1,17 @@
-{skills}: {
-  # Reusable groups belong here. Keeping the empty profiles in the public API
-  # lets consumers adopt stable names before the first skills are added.
-  common = {};
+{skills}: let
+  common = {
+    inherit (skills) commit html html-plan html-diagram hunk-review web-browser;
+  };
+in {
+  inherit common;
+
   nix = {};
-  work = {};
+
+  work = common // {
+    inherit (skills) gitlab-workflow glab;
+  };
+
+  private = common // {
+    inherit (skills) grill-me grilling;
+  };
 }
