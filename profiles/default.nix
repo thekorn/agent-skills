@@ -8,7 +8,7 @@ in {
   nix = {};
 
   work = common // {
-    inherit (skills) gitlab-workflow glab;
+    inherit (skills) ctf-sandbox-status gitlab-workflow glab;
   };
 
   private = common // {
