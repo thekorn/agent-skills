@@ -11,6 +11,7 @@ configuration decides which skills are installed on each machine.
 | --- | --- |
 | [`bun-development`](skills/bun-development/) | Develop JavaScript and TypeScript applications with the Bun runtime and toolchain. |
 | [`commit`](skills/commit/) | Create focused Git commits with concise Conventional Commits-style subjects. |
+| [`ctf-sandbox-status`](skills/ctf-sandbox-status/) | Check CTF sandbox availability and URLs for a Jira ticket ID across Vibe and brand endpoints. |
 | [`design-md`](skills/design-md/) | Analyze Stitch projects and synthesize their design systems into `DESIGN.md`. |
 | [`frontend-design`](skills/frontend-design/) | Design and implement distinctive, production-ready frontend interfaces. |
 | [`gh-cli`](skills/gh-cli/) | Work with GitHub repositories, issues, pull requests, Actions, and releases through `gh`. |

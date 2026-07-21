@@ -1,6 +1,7 @@
 {root}: {
   bun-development = root + "/skills/bun-development";
   commit = root + "/skills/commit";
+  ctf-sandbox-status = root + "/skills/ctf-sandbox-status";
   design-md = root + "/skills/design-md";
   frontend-design = root + "/skills/frontend-design";
   gh-cli = root + "/skills/gh-cli";
