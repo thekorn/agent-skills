@@ -10,6 +10,9 @@ configuration decides which skills are installed on each machine.
 | Skill | Purpose |
 | --- | --- |
 | [`bun-development`](skills/bun-development/) | Develop JavaScript and TypeScript applications with the Bun runtime and toolchain. |
+| [`burda-html`](skills/burda-html/) | Create self-contained HTML reports and prototypes in the Burda brand system. |
+| [`burda-html-diagram`](skills/burda-html-diagram/) | Create self-contained visual HTML architecture diagrams in the Burda brand system. |
+| [`burda-html-plan`](skills/burda-html-plan/) | Create pragmatic, visually organized plans as Burda-branded HTML. |
 | [`commit`](skills/commit/) | Create focused Git commits with concise Conventional Commits-style subjects. |
 | [`ctf-sandbox-status`](skills/ctf-sandbox-status/) | Check CTF sandbox availability and URLs for a Jira ticket ID across Vibe and brand endpoints. |
 | [`design-md`](skills/design-md/) | Analyze Stitch projects and synthesize their design systems into `DESIGN.md`. |

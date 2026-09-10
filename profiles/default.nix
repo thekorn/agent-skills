@@ -8,7 +8,7 @@ in {
   nix = {};
 
   work = common // {
-    inherit (skills) ctf-sandbox-status glab;
+    inherit (skills) burda-html burda-html-diagram burda-html-plan ctf-sandbox-status glab;
   };
 
   private = common // {

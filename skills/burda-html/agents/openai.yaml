@@ -1,0 +1,7 @@
+interface:
+  display_name: "Burda HTML"
+  short_description: "Create standalone HTML artifacts in the Burda brand system"
+  default_prompt: "Use $burda-html to create a polished standalone HTML artifact in the Burda brand system."
+
+policy:
+  allow_implicit_invocation: false

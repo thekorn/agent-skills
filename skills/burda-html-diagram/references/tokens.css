@@ -1,0 +1,60 @@
+/* Burda Brand Guidelines tokens — paste into :root / html.dark */
+
+:root {
+  --bg: #ffffff;
+  --ink: #000000;
+  --muted: #5c504e;
+  --surface: #f0ebeb;
+  --surface-2: #e5dada;
+  --line: #e5dada;
+  --white: #ffffff;
+  --black: #000000;
+
+  --red: #fa2d28;
+  --red-deep: #c32824;
+  --red-dark: #a3201d;
+  --orange: #ff6e00;
+  --orange-deep: #e36200;
+  --orange-dark: #bb5100;
+  --yellow: #ffe232;
+  --yellow-deep: #ecd021;
+  --yellow-dark: #ddbd00;
+  --green: #69dc96;
+  --green-deep: #18a276;
+  --green-dark: #0a7d5d;
+  --blue: #73b4ff;
+  --blue-deep: #0d8dfe;
+  --blue-dark: #0059c0;
+  --purple: #9682ff;
+  --purple-deep: #603cfe;
+  --purple-dark: #3303a7;
+  --pink: #ff69e1;
+  --pink-deep: #f022c7;
+  --pink-dark: #bf0199;
+  --grey-light: #f0ebeb;
+  --grey: #e5dada;
+  --grey-deep: #ccb8b8;
+  --grey-dark: #5c504e;
+
+  --info: var(--yellow);
+  --note: var(--purple-deep);
+  --tip: var(--green-deep);
+  --warning: var(--red);
+
+  --sans: "Burda Now", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --display: "Burda Now Tall", "Burda Now", "Arial Narrow", sans-serif;
+  --mono: "Burda Now", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --radius-pill: 500px;
+  --radius-panel: 0px;
+  --btn-pad: 15px 20px;
+}
+
+html.dark {
+  --bg: #000000;
+  --ink: #ffffff;
+  --muted: #ccb8b8;
+  --surface: #111110;
+  --surface-2: #5c504e;
+  --line: #5c504e;
+}

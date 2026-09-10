@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Burda — Design system specimen</title>
+<script>
+(function () {
+  const saved = localStorage.getItem('theme');
+  const dark = saved ? saved === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  document.documentElement.classList.toggle('dark', dark);
+})();
+</script>
+<style>
+:root {
+  --bg: #ffffff; --ink: #000000; --muted: #5c504e; --surface: #f0ebeb; --line: #e5dada;
+  --yellow: #ffe232; --purple: #9682ff; --green: #69dc96; --red: #fa2d28;
+  --sans: "Burda Now", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --display: "Burda Now Tall", "Burda Now", "Arial Narrow", sans-serif;
+}
+html.dark { --bg: #000000; --ink: #ffffff; --muted: #ccb8b8; --surface: #111110; --line: #5c504e; }
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 48px 24px 96px;
+  background: var(--bg); color: var(--ink);
+  font-family: var(--sans); font-size: 18px; line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+.page { max-width: 920px; margin: 0 auto; }
+h1 {
+  font-family: var(--display); font-weight: 700; font-size: clamp(56px, 12vw, 140px);
+  line-height: 1; margin: 0 0 20px;
+}
+.lead { font-weight: 300; font-size: 30px; line-height: 1.3; margin: 0 0 48px; max-width: 22em; }
+h2 { font-family: var(--display); font-weight: 700; font-size: clamp(40px, 8vw, 80px); line-height: 1; margin: 64px 0 18px; }
+p { margin: 0 0 10px; max-width: 40em; }
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 16px; margin: 24px 0 8px; }
+.swatch .chip { height: 72px; }
+.swatch .name { font-size: 13.5px; margin-top: 8px; }
+.swatch .hex { font-size: 13.5px; color: var(--muted); }
+.row { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0; }
+button, .btn {
+  font-family: var(--sans); font-weight: 800; font-size: 15px; line-height: 1.3;
+  text-transform: uppercase; letter-spacing: 0.02em;
+  padding: 15px 20px; border-radius: 500px; border: 0; cursor: pointer;
+}
+.btn-primary { background: #000; color: #fff; }
+html.dark .btn-primary { background: #fff; color: #000; }
+.btn-primary:hover { background: #ffe232; color: #000; }
+.btn-secondary { background: #fff; color: #000; border: 1px solid #000; }
+.btn-secondary:hover { background: #69dc96; }
+.btn-tertiary { background: #ffe232; color: #000; }
+.btn-tertiary:hover { background: #fff; border: 1px solid #000; }
+#themeToggle { position: fixed; top: 16px; right: 16px; }
+a { color: inherit; font-weight: 700; }
+</style>
+</head>
+<body>
+<button id="themeToggle" class="btn btn-secondary">Theme</button>
+<div class="page">
+  <h1>BURDA</h1>
+  <p class="lead">Klar. Offen. Beweglich.</p>
+  <p>Black and white carry the wordmark. Colour is variety, not a second logo.</p>
+
+  <h2>Farben</h2>
+  <div class="swatches">
+    <div class="swatch"><div class="chip" style="background:#000"></div><div class="name">Black</div><div class="hex">#000000</div></div>
+    <div class="swatch"><div class="chip" style="background:#fff;outline:1px solid #e5dada"></div><div class="name">White</div><div class="hex">#FFFFFF</div></div>
+    <div class="swatch"><div class="chip" style="background:#fa2d28"></div><div class="name">Cherry Pop</div><div class="hex">#FA2D28</div></div>
+    <div class="swatch"><div class="chip" style="background:#ff6e00"></div><div class="name">Orange</div><div class="hex">#FF6E00</div></div>
+    <div class="swatch"><div class="chip" style="background:#ffe232"></div><div class="name">Lemon Drop</div><div class="hex">#FFE232</div></div>
+    <div class="swatch"><div class="chip" style="background:#69dc96"></div><div class="name">Fresh Mint</div><div class="hex">#69DC96</div></div>
+    <div class="swatch"><div class="chip" style="background:#73b4ff"></div><div class="name">Bavarian Breeze</div><div class="hex">#73B4FF</div></div>
+    <div class="swatch"><div class="chip" style="background:#9682ff"></div><div class="name">Purple</div><div class="hex">#9682FF</div></div>
+    <div class="swatch"><div class="chip" style="background:#ff69e1"></div><div class="name">Soft Blush</div><div class="hex">#FF69E1</div></div>
+  </div>
+
+  <h2>Buttons</h2>
+  <div class="row">
+    <button class="btn btn-primary">Primary</button>
+    <button class="btn btn-secondary">Secondary</button>
+    <button class="btn btn-tertiary">Tertiary</button>
+  </div>
+</div>
+<script>
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const dark = !document.documentElement.classList.contains('dark');
+  document.documentElement.classList.toggle('dark', dark);
+  localStorage.setItem('theme', dark ? 'dark' : 'light');
+});
+</script>
+</body>
+</html>

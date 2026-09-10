@@ -1,0 +1,7 @@
+interface:
+  display_name: "Burda HTML Diagram"
+  short_description: "Create standalone HTML architecture diagrams in the Burda brand system"
+  default_prompt: "Use $burda-html-diagram to create a polished architecture diagram in the Burda brand system."
+
+policy:
+  allow_implicit_invocation: false

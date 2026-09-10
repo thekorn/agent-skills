@@ -1,5 +1,8 @@
 {root}: {
   bun-development = root + "/skills/bun-development";
+  burda-html = root + "/skills/burda-html";
+  burda-html-diagram = root + "/skills/burda-html-diagram";
+  burda-html-plan = root + "/skills/burda-html-plan";
   commit = root + "/skills/commit";
   ctf-sandbox-status = root + "/skills/ctf-sandbox-status";
   design-md = root + "/skills/design-md";

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Burda HTML Plan"
+  short_description: "Create pragmatic visual HTML plans in the Burda brand system"
+  default_prompt: "Use $burda-html-plan to create a pragmatic HTML plan in the Burda brand system."
+
+policy:
+  allow_implicit_invocation: false
